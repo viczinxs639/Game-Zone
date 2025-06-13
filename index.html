@@ -39,6 +39,7 @@
       cursor: pointer;
       transition: 0.3s;
       box-shadow: 0 0 15px #00aa55;
+      margin: 10px;
     }
 
     .btn:hover {
@@ -58,9 +59,19 @@
       margin-top: 20px;
     }
 
-    .back-btn {
-      margin-top: 20px;
-      background-color: #444;
+    #game-over {
+      display: none;
+      text-align: center;
+    }
+
+    #game-over h2 {
+      font-size: 3em;
+      color: red;
+      text-shadow: 0 0 10px red;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -75,48 +86,69 @@
   <!-- Seção do jogo -->
   <div id="game-section" class="centered">
     <canvas id="game" width="400" height="400"></canvas>
-    <button class="btn back-btn" onclick="backToMenu()">🔙 Voltar</button>
+    <div id="game-over">
+      <h2>💀 Game Over!</h2>
+      <button class="btn" onclick="restartGame()">🔁 Reiniciar</button>
+      <button class="btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
+    </div>
   </div>
 
   <script>
     const menu = document.getElementById('menu-section');
     const game = document.getElementById('game-section');
-
-    function startGame() {
-      menu.style.display = 'none';
-      game.style.display = 'flex';
-      requestAnimationFrame(loop);
-    }
-
-    function backToMenu() {
-      window.location.reload(); // recarrega tudo para reiniciar o jogo
-    }
-
-    // --- Jogo da Cobrinha ---
+    const gameOver = document.getElementById('game-over');
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
 
     const grid = 20;
     let count = 0;
-    let snake = {
-      x: 160,
-      y: 160,
-      dx: grid,
-      dy: 0,
-      cells: [],
-      maxCells: 4
-    };
-    let apple = {
-      x: 320,
-      y: 320
-    };
+    let animation;
+    let snake, apple;
+
+    function resetGame() {
+      snake = {
+        x: 160,
+        y: 160,
+        dx: grid,
+        dy: 0,
+        cells: [],
+        maxCells: 4
+      };
+      apple = {
+        x: getRandomInt(0, 20) * grid,
+        y: getRandomInt(0, 20) * grid
+      };
+    }
 
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
     }
 
+    function startGame() {
+      menu.style.display = 'none';
+      game.style.display = 'flex';
+      gameOver.style.display = 'none';
+      resetGame();
+      animation = requestAnimationFrame(loop);
+    }
+
+    function backToMenu() {
+      window.location.reload();
+    }
+
+    function restartGame() {
+      gameOver.style.display = 'none';
+      resetGame();
+      animation = requestAnimationFrame(loop);
+    }
+
+    function endGame() {
+      cancelAnimationFrame(animation);
+      gameOver.style.display = 'block';
+    }
+
     function loop() {
-      requestAnimationFrame(loop);
+      animation = requestAnimationFrame(loop);
 
       if (++count < 4) return;
       count = 0;
@@ -126,43 +158,48 @@
       snake.x += snake.dx;
       snake.y += snake.dy;
 
-      if (snake.x < 0) snake.x = canvas.width - grid;
-      else if (snake.x >= canvas.width) snake.x = 0;
-      if (snake.y < 0) snake.y = canvas.height - grid;
-      else if (snake.y >= canvas.height) snake.y = 0;
+      // COLISÃO COM PAREDES
+      if (
+        snake.x < 0 || snake.x >= canvas.width ||
+        snake.y < 0 || snake.y >= canvas.height
+      ) {
+        endGame();
+        return;
+      }
 
       snake.cells.unshift({ x: snake.x, y: snake.y });
 
-      if (snake.cells.length > snake.maxCells) snake.cells.pop();
+      if (snake.cells.length > snake.maxCells) {
+        snake.cells.pop();
+      }
 
+      // desenha maçã
       ctx.fillStyle = "red";
       ctx.fillRect(apple.x, apple.y, grid - 1, grid - 1);
 
+      // desenha cobra
       ctx.fillStyle = "lime";
       snake.cells.forEach(function (cell, index) {
         ctx.fillRect(cell.x, cell.y, grid - 1, grid - 1);
 
+        // come maçã
         if (cell.x === apple.x && cell.y === apple.y) {
           snake.maxCells++;
           apple.x = getRandomInt(0, 20) * grid;
           apple.y = getRandomInt(0, 20) * grid;
         }
 
+        // colide consigo mesma
         for (let i = index + 1; i < snake.cells.length; i++) {
           if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-            snake.x = 160;
-            snake.y = 160;
-            snake.cells = [];
-            snake.maxCells = 4;
-            snake.dx = grid;
-            snake.dy = 0;
-            apple.x = getRandomInt(0, 20) * grid;
-            apple.y = getRandomInt(0, 20) * grid;
+            endGame();
+            return;
           }
         }
       });
     }
 
+    // Controles
     document.addEventListener("keydown", function (e) {
       if (e.key === "ArrowLeft" && snake.dx === 0) {
         snake.dx = -grid;
