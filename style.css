@@ -8,7 +8,6 @@ body {
   overflow: hidden;
 }
 
-/* Tela inicial com fundo vibrante */
 .menu-bg {
   background: radial-gradient(circle, #1a1a1a, #0f0f0f);
   animation: backgroundAnimation 10s ease infinite alternate;
@@ -33,6 +32,8 @@ body {
   flex-direction: column;
   height: 100vh;
   text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .neon-title {
@@ -59,6 +60,7 @@ body {
   cursor: pointer;
   transition: 0.3s;
   margin: 10px;
+  user-select: none;
 }
 
 .neon-btn {
@@ -75,17 +77,24 @@ body {
   display: none;
   flex-direction: column;
   align-items: center;
-}
-
-canvas {
-  background-color: #222;
-  border: 2px solid #fff;
-  margin-top: 20px;
+  width: 100%;
 }
 
 #score, #high-score {
   font-size: 1em;
   margin: 10px;
+  user-select: none;
+}
+
+/* Canvas responsivo */
+canvas {
+  background-color: #222;
+  border: 2px solid #fff;
+  margin-top: 20px;
+  width: 90vw;      /* ocupa até 90% da largura da tela */
+  max-width: 400px; /* não passa de 400px no desktop */
+  height: auto;     /* altura ajustada proporcionalmente */
+  aspect-ratio: 1 / 1; /* sempre quadrado */
 }
 
 #game-over {
@@ -98,4 +107,24 @@ canvas {
   font-size: 2em;
   color: red;
   text-shadow: 0 0 10px red, 0 0 20px red;
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 480px) {
+  .neon-title {
+    font-size: 2em;
+  }
+
+  .subtitle {
+    font-size: 0.9em;
+  }
+
+  .btn {
+    font-size: 1em;
+    padding: 12px 20px;
+  }
+
+  #score, #high-score {
+    font-size: 0.9em;
+  }
 }
