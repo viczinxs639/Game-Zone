@@ -20,7 +20,7 @@ function resetGame() {
   snake = {
     x: grid * 8,
     y: grid * 8,
-    dx: grid,  // Começa parado ou já em movimento pra direita
+    dx: grid,
     dy: 0,
     cells: [],
     maxCells: 4
@@ -72,7 +72,7 @@ function endGame() {
 function loop() {
   animation = requestAnimationFrame(loop);
 
-  if (++count < 8) return;  // Controla velocidade
+  if (++count < 8) return;  // velocidade controlada aqui
   count = 0;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
