@@ -10,9 +10,9 @@
 <body>
 
   <!-- Tela inicial -->
-  <div id="menu-section" class="centered">
-    <h1>🎮 Game Zone</h1>
-    <button class="btn" onclick="startGame()">Jogar Cobrinha 🐍</button>
+  <div id="menu-section" class="centered menu-bg">
+    <h1 class="neon-title">🎮 Game Zone</h1>
+    <button class="btn neon-btn" onclick="startGame()">Jogar Cobrinha 🐍</button>
   </div>
 
   <!-- Seção do jogo -->
@@ -22,12 +22,13 @@
     <canvas id="game" width="400" height="400"></canvas>
 
     <div id="game-over">
-      <h2>💀 Game Over!</h2>
-      <button class="btn" onclick="restartGame()">🔁 Reiniciar</button>
-      <button class="btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
+      <h2 class="neon-gameover">💀 Game Over!</h2>
+      <button class="btn neon-btn" onclick="restartGame()">🔁 Reiniciar</button>
+      <button class="btn neon-btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
