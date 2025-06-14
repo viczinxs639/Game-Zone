@@ -1,138 +1,124 @@
-/* Reset básico */
+/* Reset */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  font-family: 'Press Start 2P', cursive;
+  margin: 0;
+  padding: 0;
   background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  font-family: 'Arial', sans-serif;
   color: white;
   height: 100vh;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent; /* remove highlight no mobile */
 }
 
-.menu-bg {
-  background: radial-gradient(circle, #1a1a1a, #0f0f0f);
-  animation: backgroundAnimation 10s ease infinite alternate;
-}
-
-@keyframes backgroundAnimation {
-  0% {
-    background: radial-gradient(circle, #1a1a1a, #0f0f0f);
-  }
-  50% {
-    background: radial-gradient(circle, #330033, #000022);
-  }
-  100% {
-    background: radial-gradient(circle, #1a1a1a, #0f0f0f);
-  }
-}
-
+/* Centralizar tudo */
 .centered {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100vh;
-  text-align: center;
   padding: 20px;
+  text-align: center;
 }
 
-.neon-title {
-  font-size: 3em;
-  color: #00ffea;
-  text-shadow:
-    0 0 10px #00ffea,
-    0 0 20px #00ffea,
-    0 0 30px #00ffea;
-  margin-bottom: 20px;
+/* Tela inicial vibrante/neon */
+#menu-section {
+  background: #001a00;
+  box-shadow: 0 0 30px #00ff88;
+  border-radius: 20px;
+  padding: 40px 60px;
 }
 
-.subtitle {
-  font-size: 1em;
-  color: #ff00aa;
-  text-shadow:
-    0 0 5px #ff00aa,
-    0 0 10px #ff00aa;
+h1 {
+  font-size: 4em;
   margin-bottom: 40px;
+  color: #00ff88;
+  text-shadow: 0 0 15px #00ff88;
 }
 
 .btn {
-  padding: 15px 30px;
-  font-size: 1em;
+  padding: 20px 40px;
+  font-size: 1.5em;
   color: white;
   background-color: #00aa55;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: 0.3s;
+  box-shadow: 0 0 15px #00aa55;
   margin: 10px;
   user-select: none;
 }
 
-.neon-btn {
-  box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
-}
-
-.neon-btn:hover {
+.btn:hover,
+.btn:focus {
   background-color: #00ff88;
-  box-shadow: 0 0 20px #00ff88, 0 0 30px #00ff88;
+  box-shadow: 0 0 25px #00ff88;
+  outline: none;
 }
 
+/* Seção do jogo inicialmente oculta */
 #game-section {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-width: 420px;
 }
 
-#score, #high-score {
-  font-size: 1em;
-  margin: 10px;
-  user-select: none;
+/* Placar */
+#scoreboard {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  color: #00ff88;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #00ff88;
 }
 
+/* Canvas com borda */
 canvas {
   background-color: #222;
   border: 2px solid #fff;
-  margin-top: 20px;
-  width: 90vw;
-  max-width: 400px;
+  border-radius: 10px;
+  width: 100%;
   height: auto;
+  max-width: 400px;
   aspect-ratio: 1 / 1;
+  touch-action: none; /* evita zoom ou scroll ao jogar no celular */
 }
 
+/* Game over */
 #game-over {
   display: none;
   text-align: center;
   margin-top: 20px;
 }
 
-.neon-gameover {
-  font-size: 2em;
+#game-over h2 {
+  font-size: 3em;
   color: red;
-  text-shadow:
-    0 0 10px red,
-    0 0 20px red;
+  text-shadow: 0 0 15px red;
 }
 
-@media (max-width: 480px) {
-  .neon-title {
-    font-size: 2em;
-  }
-
-  .subtitle {
-    font-size: 0.9em;
+/* Responsividade para celulares */
+@media (max-width: 500px) {
+  h1 {
+    font-size: 3em;
   }
 
   .btn {
-    font-size: 1em;
-    padding: 12px 20px;
+    padding: 15px 30px;
+    font-size: 1.2em;
   }
 
-  #score, #high-score {
-    font-size: 0.9em;
+  #scoreboard {
+    font-size: 1em;
   }
 }
