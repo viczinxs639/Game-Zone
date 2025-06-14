@@ -1,30 +1,101 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Zone</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-</head>
-<body>
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #0f0026, #1a0044);
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  <!-- Tela inicial -->
-  <div id="menu-section" class="centered">
-    <h1>🎮 Game Zone</h1>
-    <button class="btn" onclick="startGame()">Jogar Cobrinha 🐍</button>
-  </div>
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  text-align: center;
+}
 
-  <!-- Seção do jogo -->
-  <div id="game-section" class="centered">
-    <div id="score">Score: 0</div>
-    <div id="high-score">Recorde: 0</div>
-    <canvas id="game" width="400" height="400"></canvas>
-    <div id="game-over">
-      <h2>💀 Game Over!</h2>
-      <button class="btn" onclick="restartGame()">🔁 Reiniciar</button>
-      <button class="btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
-    </div>
-  </div>
+/* Tela inicial com fundo neon */
+.menu-bg {
+  background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
+}
 
-  <script src="scrip
+.neon-title {
+  font-size: 3em;
+  color: #00ff88;
+  text-shadow:
+    0 0 5px #00ff88,
+    0 0 10px #00ff88,
+    0 0 20px #00ff88,
+    0 0 40px #00ff88;
+  margin-bottom: 40px;
+}
+
+.neon-btn {
+  padding: 15px 30px;
+  font-size: 1em;
+  color: white;
+  background-color: #00ffaa;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00ffaa, 0 0 30px #00ffaa;
+  transition: 0.3s;
+  margin: 10px;
+}
+
+.neon-btn:hover {
+  background-color: #00ffff;
+  box-shadow: 0 0 25px #00ffff, 0 0 40px #00ffff;
+}
+
+h1, h2, #score, #high-score, button {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#game-section {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+canvas {
+  background-color: #222;
+  border: 2px solid #fff;
+  margin-top: 20px;
+  width: 90vw;
+  height: 90vw;
+  max-width: 400px;
+  max-height: 400px;
+}
+
+#game-over {
+  display: none;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.neon-gameover {
+  font-size: 1.8em;
+  color: red;
+  text-shadow:
+    0 0 5px red,
+    0 0 10px red,
+    0 0 20px red,
+    0 0 40px red;
+}
+
+#score {
+  font-size: 1.2em;
+  color: #00ff88;
+  text-shadow: 0 0 5px #00ff88;
+}
+
+#high-score {
+  font-size: 1em;
+  color: #ffaa00;
+  text-shadow: 0 0 5px #ffaa00;
+}
