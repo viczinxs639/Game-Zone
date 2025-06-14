@@ -8,6 +8,14 @@ const grid = 20;
 let count = 0;
 let animation;
 let snake, apple;
+let score = 0;
+let highScore = localStorage.getItem('highScore') || 0;
+
+const scoreDisplay = document.getElementById('score');
+const highScoreDisplay = document.getElementById('high-score');
+
+const eatSound = new Audio('eat.mp3');
+const gameOverSound = new Audio('gameover.mp3');
 
 function resetGame() {
   snake = {
@@ -22,6 +30,9 @@ function resetGame() {
     x: getRandomInt(0, 20) * grid,
     y: getRandomInt(0, 20) * grid
   };
+  score = 0;
+  scoreDisplay.textContent = 'Score: 0';
+  highScoreDisplay.textContent = 'Recorde: ' + highScore;
 }
 
 function getRandomInt(min, max) {
@@ -49,12 +60,19 @@ function restartGame() {
 function endGame() {
   cancelAnimationFrame(animation);
   gameOver.style.display = 'block';
+  gameOverSound.play();
+
+  if (score > highScore) {
+    highScore = score;
+    localStorage.setItem('highScore', highScore);
+    highScoreDisplay.textContent = 'Recorde: ' + highScore;
+  }
 }
 
 function loop() {
   animation = requestAnimationFrame(loop);
 
-  if (++count < 4) return;
+  if (++count < 8) return;  // Velocidade inicial mais lenta
   count = 0;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -62,7 +80,7 @@ function loop() {
   snake.x += snake.dx;
   snake.y += snake.dy;
 
-  // COLISÃO COM PAREDES
+  // Colisão com as paredes
   if (
     snake.x < 0 || snake.x >= canvas.width ||
     snake.y < 0 || snake.y >= canvas.height
@@ -77,23 +95,26 @@ function loop() {
     snake.cells.pop();
   }
 
-  // desenha maçã
+  // Desenhar a maçã
   ctx.fillStyle = "red";
   ctx.fillRect(apple.x, apple.y, grid - 1, grid - 1);
 
-  // desenha cobra
+  // Desenhar a cobra
   ctx.fillStyle = "lime";
   snake.cells.forEach(function (cell, index) {
     ctx.fillRect(cell.x, cell.y, grid - 1, grid - 1);
 
-    // come maçã
+    // Cobra come a maçã
     if (cell.x === apple.x && cell.y === apple.y) {
       snake.maxCells++;
+      score++;
+      scoreDisplay.textContent = 'Score: ' + score;
+      eatSound.play();
       apple.x = getRandomInt(0, 20) * grid;
       apple.y = getRandomInt(0, 20) * grid;
     }
 
-    // colide consigo mesma
+    // Cobra colide consigo mesma
     for (let i = index + 1; i < snake.cells.length; i++) {
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
         endGame();
