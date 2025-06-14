@@ -1,11 +1,29 @@
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #0f0026, #1a0044);
   font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
   color: white;
   height: 100vh;
   overflow: hidden;
+}
+
+/* Tela inicial com fundo vibrante */
+.menu-bg {
+  background: radial-gradient(circle, #1a1a1a, #0f0f0f);
+  animation: backgroundAnimation 10s ease infinite alternate;
+}
+
+@keyframes backgroundAnimation {
+  0% {
+    background: radial-gradient(circle, #1a1a1a, #0f0f0f);
+  }
+  50% {
+    background: radial-gradient(circle, #330033, #000022);
+  }
+  100% {
+    background: radial-gradient(circle, #1a1a1a, #0f0f0f);
+  }
 }
 
 .centered {
@@ -17,45 +35,42 @@ body {
   text-align: center;
 }
 
-/* Tela inicial com fundo neon */
-.menu-bg {
-  background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
-}
-
 .neon-title {
   font-size: 3em;
-  color: #00ff88;
-  text-shadow:
-    0 0 5px #00ff88,
-    0 0 10px #00ff88,
-    0 0 20px #00ff88,
-    0 0 40px #00ff88;
+  color: #00ffea;
+  text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea, 0 0 30px #00ffea;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 1em;
+  color: #ff00aa;
+  text-shadow: 0 0 5px #ff00aa, 0 0 10px #ff00aa;
   margin-bottom: 40px;
 }
 
-.neon-btn {
+.btn {
   padding: 15px 30px;
   font-size: 1em;
   color: white;
-  background-color: #00ffaa;
+  background-color: #00aa55;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  box-shadow: 0 0 15px #00ffaa, 0 0 30px #00ffaa;
   transition: 0.3s;
   margin: 10px;
 }
 
+.neon-btn {
+  box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+}
+
 .neon-btn:hover {
-  background-color: #00ffff;
-  box-shadow: 0 0 25px #00ffff, 0 0 40px #00ffff;
+  background-color: #00ff88;
+  box-shadow: 0 0 20px #00ff88, 0 0 30px #00ff88;
 }
 
-h1, h2, #score, #high-score, button {
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
+/* Seção do jogo */
 #game-section {
   display: none;
   flex-direction: column;
@@ -66,10 +81,11 @@ canvas {
   background-color: #222;
   border: 2px solid #fff;
   margin-top: 20px;
-  width: 90vw;
-  height: 90vw;
-  max-width: 400px;
-  max-height: 400px;
+}
+
+#score, #high-score {
+  font-size: 1em;
+  margin: 10px;
 }
 
 #game-over {
@@ -79,23 +95,7 @@ canvas {
 }
 
 .neon-gameover {
-  font-size: 1.8em;
+  font-size: 2em;
   color: red;
-  text-shadow:
-    0 0 5px red,
-    0 0 10px red,
-    0 0 20px red,
-    0 0 40px red;
-}
-
-#score {
-  font-size: 1.2em;
-  color: #00ff88;
-  text-shadow: 0 0 5px #00ff88;
-}
-
-#high-score {
-  font-size: 1em;
-  color: #ffaa00;
-  text-shadow: 0 0 5px #ffaa00;
+  text-shadow: 0 0 10px red, 0 0 20px red;
 }
