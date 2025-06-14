@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Game Zone</title>
-  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -17,12 +17,12 @@
   </div>
 
   <!-- Seção do Jogo -->
-  <div id="game-section" class="centered">
+  <div id="game-section" class="centered" style="display:none;">
     <div id="score">Score: 0</div>
     <div id="high-score">Recorde: 0</div>
     <canvas id="game"></canvas>
 
-    <div id="game-over">
+    <div id="game-over" style="display:none;">
       <h2 class="neon-gameover">💀 Game Over!</h2>
       <button class="btn neon-btn" onclick="restartGame()">🔁 Reiniciar</button>
       <button class="btn neon-btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
