@@ -9,13 +9,8 @@ let count = 0;
 let animation;
 let snake, apple;
 let score = 0;
-let highScore = localStorage.getItem('highScore') || 0;
-
-const scoreDisplay = document.getElementById('score');
-const highScoreDisplay = document.getElementById('high-score');
-
-const eatSound = new Audio('eat.mp3');
-const gameOverSound = new Audio('gameover.mp3');
+let highScore = 0;
+let speed = 6;  // Velocidade mais lenta (pode ajustar entre 4 a 10 para deixar mais lento ou rápido)
 
 function resetGame() {
   snake = {
@@ -31,8 +26,7 @@ function resetGame() {
     y: getRandomInt(0, 20) * grid
   };
   score = 0;
-  scoreDisplay.textContent = 'Score: 0';
-  highScoreDisplay.textContent = 'Recorde: ' + highScore;
+  updateScore();
 }
 
 function getRandomInt(min, max) {
@@ -60,19 +54,20 @@ function restartGame() {
 function endGame() {
   cancelAnimationFrame(animation);
   gameOver.style.display = 'block';
-  gameOverSound.play();
-
   if (score > highScore) {
     highScore = score;
-    localStorage.setItem('highScore', highScore);
-    highScoreDisplay.textContent = 'Recorde: ' + highScore;
+    document.getElementById('high-score').textContent = "Recorde: " + highScore;
   }
+}
+
+function updateScore() {
+  document.getElementById('score').textContent = "Score: " + score;
 }
 
 function loop() {
   animation = requestAnimationFrame(loop);
 
-  if (++count < 8) return;  // Velocidade inicial mais lenta
+  if (++count < speed) return;
   count = 0;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -80,7 +75,7 @@ function loop() {
   snake.x += snake.dx;
   snake.y += snake.dy;
 
-  // Colisão com as paredes
+  // Colisão com paredes
   if (
     snake.x < 0 || snake.x >= canvas.width ||
     snake.y < 0 || snake.y >= canvas.height
@@ -95,11 +90,11 @@ function loop() {
     snake.cells.pop();
   }
 
-  // Desenhar a maçã
+  // Desenha maçã
   ctx.fillStyle = "red";
   ctx.fillRect(apple.x, apple.y, grid - 1, grid - 1);
 
-  // Desenhar a cobra
+  // Desenha cobra
   ctx.fillStyle = "lime";
   snake.cells.forEach(function (cell, index) {
     ctx.fillRect(cell.x, cell.y, grid - 1, grid - 1);
@@ -108,8 +103,7 @@ function loop() {
     if (cell.x === apple.x && cell.y === apple.y) {
       snake.maxCells++;
       score++;
-      scoreDisplay.textContent = 'Score: ' + score;
-      eatSound.play();
+      updateScore();
       apple.x = getRandomInt(0, 20) * grid;
       apple.y = getRandomInt(0, 20) * grid;
     }
@@ -124,6 +118,7 @@ function loop() {
   });
 }
 
+// Controles de teclado
 document.addEventListener("keydown", function (e) {
   if (e.key === "ArrowLeft" && snake.dx === 0) {
     snake.dx = -grid;
