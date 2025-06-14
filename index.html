@@ -4,28 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Game Zone</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- Tela Inicial -->
-  <div id="menu-section" class="centered menu-bg">
-    <h1 class="neon-title">🎮 Game Zone</h1>
-    <p class="subtitle">Prepare-se para desafiar sua habilidade na Cobrinha Neon!</p>
-    <button class="btn neon-btn" onclick="startGame()">▶️ Jogar Cobrinha 🐍</button>
+  <!-- Tela inicial -->
+  <div id="menu-section" class="centered">
+    <h1>🎮 Game Zone</h1>
+    <button class="btn" onclick="startGame()">Jogar Cobrinha 🐍</button>
   </div>
 
-  <!-- Seção do Jogo -->
-  <div id="game-section" class="centered" style="display:none;">
-    <div id="score">Score: 0</div>
-    <div id="high-score">Recorde: 0</div>
+  <!-- Seção do jogo -->
+  <div id="game-section" class="centered">
+    <div id="scoreboard">
+      <span id="score">Score: 0</span>
+      <span id="high-score">Recorde: 0</span>
+    </div>
     <canvas id="game" width="400" height="400"></canvas>
-
-    <div id="game-over" style="display:none;">
-      <h2 class="neon-gameover">💀 Game Over!</h2>
-      <button class="btn neon-btn" onclick="restartGame()">🔁 Reiniciar</button>
-      <button class="btn neon-btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
+    <div id="game-over">
+      <h2>💀 Game Over!</h2>
+      <button class="btn" onclick="restartGame()">🔁 Reiniciar</button>
+      <button class="btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
     </div>
   </div>
 
