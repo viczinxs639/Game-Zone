@@ -1,35 +1,183 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Zone</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+const menu = document.getElementById('menu-section');
+const game = document.getElementById('game-section');
+const gameOver = document.getElementById('game-over');
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-  <!-- Tela Inicial -->
-  <div id="menu-section" class="centered menu-bg">
-    <h1 class="neon-title">🎮 Game Zone</h1>
-    <p class="subtitle">Prepare-se para desafiar sua habilidade na Cobrinha Neon!</p>
-    <button class="btn neon-btn" onclick="startGame()">▶️ Jogar Cobrinha 🐍</button>
-  </div>
+const grid = 20;
+const gridCount = canvas.width / grid;
 
-  <!-- Seção do Jogo -->
-  <div id="game-section" class="centered" style="display:none;">
-    <div id="score">Score: 0</div>
-    <div id="high-score">Recorde: 0</div>
-    <canvas id="game" width="400" height="400"></canvas>
+let count = 0;
+let animation;
+let snake, apple;
+let score = 0;
+let highScore = 0;
 
-    <div id="game-over" style="display:none;">
-      <h2 class="neon-gameover">💀 Game Over!</h2>
-      <button class="btn neon-btn" onclick="restartGame()">🔁 Reiniciar</button>
-      <button class="btn neon-btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
-    </div>
-  </div>
+// Elementos de pontuação
+const scoreEl = document.getElementById('score');
+const highScoreEl = document.getElementById('high-score');
 
-  <script src="script.js"></script>
-</body>
-</html>
+function resetGame() {
+  snake = {
+    x: grid * 8, // centro da tela
+    y: grid * 8,
+    dx: grid / 2, // velocidade menor para iniciar (10 px por frame)
+    dy: 0,
+    cells: [],
+    maxCells: 4
+  };
+  apple = {
+    x: getRandomInt(0, gridCount) * grid,
+    y: getRandomInt(0, gridCount) * grid
+  };
+  score = 0;
+  updateScore();
+}
 
+function updateScore() {
+  scoreEl.textContent = `Score: ${score}`;
+  highScoreEl.textContent = `Recorde: ${highScore}`;
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function startGame() {
+  menu.style.display = 'none';
+  game.style.display = 'flex';
+  gameOver.style.display = 'none';
+  resetGame();
+  animation = requestAnimationFrame(loop);
+}
+
+function backToMenu() {
+  window.location.reload();
+}
+
+function restartGame() {
+  gameOver.style.display = 'none';
+  resetGame();
+  animation = requestAnimationFrame(loop);
+}
+
+function endGame() {
+  cancelAnimationFrame(animation);
+  gameOver.style.display = 'block';
+  if (score > highScore) {
+    highScore = score;
+    updateScore();
+  }
+}
+
+function loop() {
+  animation = requestAnimationFrame(loop);
+
+  if (++count < 8) return;  // Diminui a velocidade (aumenta o limite)
+  count = 0;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Atualiza posição da cobra
+  snake.x += snake.dx;
+  snake.y += snake.dy;
+
+  // COLISÃO COM PAREDES
+  if (
+    snake.x < 0 || snake.x >= canvas.width ||
+    snake.y < 0 || snake.y >= canvas.height
+  ) {
+    endGame();
+    return;
+  }
+
+  // Adiciona a nova posição no começo do array
+  snake.cells.unshift({ x: snake.x, y: snake.y });
+
+  // Remove células extras
+  if (snake.cells.length > snake.maxCells) {
+    snake.cells.pop();
+  }
+
+  // Desenha maçã
+  ctx.fillStyle = "red";
+  ctx.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+
+  // Desenha cobra e verifica colisões
+  ctx.fillStyle = "lime";
+  for (let i = 0; i < snake.cells.length; i++) {
+    let cell = snake.cells[i];
+    ctx.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+
+    // Come maçã
+    if (cell.x === apple.x && cell.y === apple.y) {
+      snake.maxCells++;
+      score++;
+      updateScore();
+      // Posiciona maçã em lugar aleatório, evitando a cobra
+      do {
+        apple.x = getRandomInt(0, gridCount) * grid;
+        apple.y = getRandomInt(0, gridCount) * grid;
+      } while (snake.cells.some(c => c.x === apple.x && c.y === apple.y));
+    }
+
+    // Colisão com ela mesma
+    for (let j = i + 1; j < snake.cells.length; j++) {
+      if (cell.x === snake.cells[j].x && cell.y === snake.cells[j].y) {
+        endGame();
+        return;
+      }
+    }
+  }
+}
+
+// Controle do teclado para a cobra (não permite virar 180 graus)
+document.addEventListener("keydown", function (e) {
+  if (e.key === "ArrowLeft" && snake.dx === 0) {
+    snake.dx = -grid;
+    snake.dy = 0;
+  } else if (e.key === "ArrowUp" && snake.dy === 0) {
+    snake.dy = -grid;
+    snake.dx = 0;
+  } else if (e.key === "ArrowRight" && snake.dx === 0) {
+    snake.dx = grid;
+    snake.dy = 0;
+  } else if (e.key === "ArrowDown" && snake.dy === 0) {
+    snake.dy = grid;
+    snake.dx = 0;
+  }
+});
+
+// Controle para tocar na tela no celular
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener("touchstart", function (e) {
+  const touch = e.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+});
+
+document.addEventListener("touchend", function (e) {
+  const touch = e.changedTouches[0];
+  let dx = touch.clientX - touchStartX;
+  let dy = touch.clientY - touchStartY;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 30 && snake.dx === 0) { // swipe para direita
+      snake.dx = grid;
+      snake.dy = 0;
+    } else if (dx < -30 && snake.dx === 0) { // swipe para esquerda
+      snake.dx = -grid;
+      snake.dy = 0;
+    }
+  } else {
+    if (dy > 30 && snake.dy === 0) { // swipe para baixo
+      snake.dy = grid;
+      snake.dx = 0;
+    } else if (dy < -30 && snake.dy === 0) { // swipe para cima
+      snake.dy = -grid;
+      snake.dx = 0;
+    }
+  }
+});
