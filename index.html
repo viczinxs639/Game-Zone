@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game Zone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Zone - Cobrinha 🐍</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,17 +11,14 @@
   <!-- Tela inicial -->
   <div id="menu-section" class="centered">
     <h1>🎮 Game Zone</h1>
-    <button class="btn" onclick="startGame()">Jogar Cobrinha 🐍</button>
+    <p>Bem-vindo! Prepare-se para jogar a clássica Cobrinha 🐍</p>
+    <button class="btn" onclick="startGame()">▶️ Jogar</button>
   </div>
 
   <!-- Seção do jogo -->
-  <div id="game-section" class="centered">
-    <div id="scoreboard">
-      <span id="score">Score: 0</span>
-      <span id="high-score">Recorde: 0</span>
-    </div>
+  <div id="game-section" class="centered" style="display: none;">
     <canvas id="game" width="400" height="400"></canvas>
-    <div id="game-over">
+    <div id="game-over" style="display: none;">
       <h2>💀 Game Over!</h2>
       <button class="btn" onclick="restartGame()">🔁 Reiniciar</button>
       <button class="btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
