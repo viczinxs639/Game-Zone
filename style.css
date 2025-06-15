@@ -1,157 +1,129 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: white;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  user-select: none;
-}
-
-.centered {
+/* Reset e estilo base */
+body, html {
+  margin: 0; padding: 0;
+  height: 100%;
+  background: #111;
+  color: #0f0;
+  font-family: 'Courier New', Courier, monospace;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  max-width: 480px;
-  height: 100vh;
+  justify-content: center;
+}
+
+/* Texturas embutidas base64: */
+
+/* Snake textura: padrão hexagonal verde escuro */
+body.snake-texture {
+  --snake-texture: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAArUlEQVRIDb3UMQqDMBQE0NcVRYJ0Es2DTNAki2zpHn1DkqZQC9tg/JdE9q+GbJf4Z7KnGWcDF6AlYhVRTYoPqV7gHx3kZDzC3ib7UEaQdcGQET8ykOaDGtcu+RqxEi7MCI2T4ajUzfOGnD3J5PX5T5cvyX68ARl2MbbIgAHT1I2xaFIMXL9AMFjv4hfyDQjD8l3QzvI03nsy3hyoc/y5r0A8PhU4c6Xb7lIAAAAASUVORK5CYII=");
+}
+
+/* Apple textura: vermelho com pequenos círculos */
+body.apple-texture {
+  --apple-texture: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAArUlEQVRIDb3UMQqDMBQE0NcVRYJ0Es2DTNAki2zpHn1DkqZQC9tg/JdE9q+GbJf4Z7KnGWcDF6AlYhVRTYoPqV7gHx3kZDzC3ib7UEaQdcGQET8ykOaDGtcu+RqxEi7MCI2T4ajUzfOGnD3J5PX5T5cvyX68ARl2MbbIgAHT1I2xaFIMXL9AMFjv4hfyDQjD8l3QzvI03nsy3hyoc/y5r0A8PhU4c6Xb7lIAAAAASUVORK5CYII=");
+}
+
+/* Container do jogo */
+#game-container {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  background-color: #222;
+  border: 3px solid #0f0;
+  box-shadow: 0 0 10px #0f0;
+}
+
+canvas {
+  display: block;
+  background-color: #000;
+  margin: auto;
+  border-radius: 8px;
+}
+
+/* HUD do score */
+#score {
+  margin: 10px 0;
+  font-size: 24px;
+  letter-spacing: 2px;
+}
+
+/* Botão iniciar */
+#start-button {
+  background: #0f0;
+  border: none;
+  color: #000;
+  font-weight: bold;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 0 15px #0f0;
+  transition: background 0.3s;
+}
+#start-button:hover {
+  background: #0c0;
+}
+
+/* Modal ranking */
+#ranking-modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #111;
+  border: 2px solid #0f0;
+  padding: 20px 40px;
+  box-shadow: 0 0 30px #0f0;
+  display: none;
+  z-index: 1000;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+#ranking-modal h2 {
+  margin-top: 0;
+  color: #0f0;
   text-align: center;
 }
-
-/* Neon background */
-.neon-bg {
-  background: linear-gradient(45deg, #00ff88, #00cc66);
-  box-shadow: 0 0 50px #00ff88, inset 0 0 30px #00cc66;
-  width: 100%;
-  height: 100vh;
-}
-
-/* Start container */
-.start-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.snake-img {
-  width: 150px;
-  height: auto;
-  filter: drop-shadow(0 0 5px #00ff88);
-}
-
-h1 {
-  font-size: 3.5em;
-  color: #00ff88;
-  text-shadow: 0 0 15px #00ff88;
-}
-
-/* Buttons */
-.btn {
-  padding: 18px 45px;
-  font-size: 1.5em;
-  color: white;
-  background-color: #00aa55;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 0 15px #00aa55;
-}
-
-.btn:hover,
-.btn:focus {
-  background-color: #00ff88;
-  box-shadow: 0 0 25px #00ff88;
-  outline: none;
-}
-
-.neon-btn {
-  box-shadow: 0 0 20px #00ff88, inset 0 0 10px #00ff88;
-}
-
-/* Scoreboard */
-#scoreboard {
-  display: flex;
-  justify-content: space-between;
-  width: 400px;
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  color: #00ff88;
-  text-shadow: 0 0 10px #00ff88;
-}
-
-/* Game section */
-#game-section {
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 480px;
-}
-
-/* Canvas */
-canvas {
-  background-color: #222;
-  border: 2px solid #fff;
-  margin-top: 10px;
-  touch-action: none;
-  width: 400px;
-  height: 400px;
-  max-width: 100%;
-  max-height: 100%;
-  image-rendering: pixelated;
-}
-
-/* Game Over */
-#game-over {
-  margin-top: 20px;
-}
-
-#game-over h2 {
-  font-size: 3em;
-  color: red;
-  text-shadow: 0 0 10px red;
-}
-
-/* Ranking */
-#ranking-section {
-  margin-top: 15px;
-  text-align: left;
-  color: #00ff88;
-}
-
 #ranking-list {
-  list-style-position: inside;
-  font-size: 1.2em;
+  list-style: none;
+  padding-left: 0;
+}
+#ranking-list li {
+  margin: 5px 0;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+}
+#close-ranking {
+  display: block;
+  margin: 20px auto 0 auto;
+  background: #0f0;
+  border: none;
+  padding: 8px 15px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-/* Mobile styles */
-@media (max-width: 450px) {
-  canvas {
-    width: 300px !important;
-    height: 300px !important;
-  }
-  #scoreboard {
-    width: 300px;
-    font-size: 1.2em;
-  }
-  h1 {
-    font-size: 2.5em;
-  }
-  .btn {
-    padding: 15px 30px;
-    font-size: 1.2em;
-  }
-  .snake-img {
-    width: 120px;
-  }
+/* Toques de controle para celular */
+#touch-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 15px;
+}
+#touch-controls button {
+  background: #0f0;
+  border: none;
+  padding: 15px 18px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #0f0;
+  cursor: pointer;
+  user-select: none;
+}
+#touch-controls button:active {
+  background: #0c0;
 }
