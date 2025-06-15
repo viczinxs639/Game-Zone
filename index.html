@@ -1,43 +1,33 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game Zone - Jogo da Cobrinha</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jogo Snake com Texturas e Ranking</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="snake-texture apple-texture">
 
-  <!-- Tela inicial -->
-  <div id="menu-section" class="centered neon-bg">
-    <div class="start-container">
-      <img src="snake-texture.png" alt="Cobrinha" class="snake-img" />
-      <h1>Jogo da Cobrinha 🐍</h1>
-      <button id="start-button" class="btn neon-btn">Iniciar</button>
-    </div>
-  </div>
+<button id="start-button">Iniciar Jogo</button>
+<div id="score">Score: 0</div>
+<div id="game-container">
+  <canvas id="game" width="600" height="600"></canvas>
+</div>
 
-  <!-- Seção do jogo -->
-  <div id="game-section" class="centered" style="display:none;">
-    <div id="scoreboard">
-      <span id="score">Score: 0</span>
-      <span id="high-score">Recorde: 0</span>
-    </div>
-    <canvas id="game" width="400" height="400"></canvas>
-    <div id="game-over" style="display:none;">
-      <h2>💀 Game Over!</h2>
-      <button class="btn neon-btn" id="restart-button">🔁 Reiniciar</button>
-      <button class="btn neon-btn" id="back-menu-button">🔙 Voltar ao Menu</button>
-      <div id="ranking-section">
-        <h3>Ranking Local</h3>
-        <ol id="ranking-list"></ol>
-      </div>
-    </div>
-  </div>
+<div id="touch-controls">
+  <button data-dir="ArrowUp" aria-label="Cima">↑</button>
+  <button data-dir="ArrowLeft" aria-label="Esquerda">←</button>
+  <button data-dir="ArrowDown" aria-label="Baixo">↓</button>
+  <button data-dir="ArrowRight" aria-label="Direita">→</button>
+</div>
 
-  <audio id="eat-sound" src="eat.wav" preload="auto"></audio>
-  <audio id="gameover-sound" src="gameover.wav" preload="auto"></audio>
+<!-- Modal ranking -->
+<div id="ranking-modal" role="dialog" aria-modal="true" aria-labelledby="ranking-title">
+  <h2 id="ranking-title">Ranking dos 5 Melhores</h2>
+  <ul id="ranking-list"></ul>
+  <button id="close-ranking">Fechar</button>
+</div>
 
-  <script src="script.js"></script>
+<script src="game.js"></script>
 </body>
 </html>
