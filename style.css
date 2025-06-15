@@ -1,4 +1,3 @@
-/* Reset básico */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -18,20 +17,20 @@ body {
 
 .centered {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   width: 100%;
+  max-width: 480px;
   height: 100vh;
+  text-align: center;
 }
 
 .neon-bg {
   background: linear-gradient(45deg, #00ff88, #00cc66);
   box-shadow: 0 0 50px #00ff88, inset 0 0 30px #00cc66;
   width: 100%;
-  max-width: 480px;
   height: 100vh;
-  text-align: center;
 }
 
 h1 {
@@ -89,7 +88,7 @@ canvas {
   background-color: #222;
   border: 2px solid #fff;
   margin-top: 10px;
-  touch-action: none; /* para touch funcionar melhor */
+  touch-action: none;
   width: 400px;
   height: 400px;
   max-width: 100%;
@@ -108,28 +107,7 @@ canvas {
   user-select: none;
 }
 
-#ranking {
-  margin-top: 20px;
-  text-align: center;
-  color: #00ff88;
-  font-size: 1.2em;
-  text-shadow: 0 0 10px #00ff88;
-  user-select: none;
-}
-
-/* Para o botão iniciar */
-#start-button {
-  background: linear-gradient(45deg, #00ff88, #007755);
-  box-shadow: 0 0 25px #00ff88;
-}
-
-/* Hover botão iniciar */
-#start-button:hover {
-  background: linear-gradient(45deg, #00ffaa, #009966);
-  box-shadow: 0 0 35px #00ffaa;
-}
-
-/* Ajustes mobile */
+/* Mobile */
 @media (max-width: 450px) {
   canvas {
     width: 300px !important;
