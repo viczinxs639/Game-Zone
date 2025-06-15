@@ -1,129 +1,97 @@
-/* Reset e estilo base */
 body, html {
-  margin: 0; padding: 0;
-  height: 100%;
-  background: #111;
+  margin: 0;
+  padding: 0;
+  background-color: #111;
   color: #0f0;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: monospace;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100vh;
 }
 
-/* Texturas embutidas base64: */
-
-/* Snake textura: padrão hexagonal verde escuro */
-body.snake-texture {
-  --snake-texture: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAArUlEQVRIDb3UMQqDMBQE0NcVRYJ0Es2DTNAki2zpHn1DkqZQC9tg/JdE9q+GbJf4Z7KnGWcDF6AlYhVRTYoPqV7gHx3kZDzC3ib7UEaQdcGQET8ykOaDGtcu+RqxEi7MCI2T4ajUzfOGnD3J5PX5T5cvyX68ARl2MbbIgAHT1I2xaFIMXL9AMFjv4hfyDQjD8l3QzvI03nsy3hyoc/y5r0A8PhU4c6Xb7lIAAAAASUVORK5CYII=");
-}
-
-/* Apple textura: vermelho com pequenos círculos */
-body.apple-texture {
-  --apple-texture: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAArUlEQVRIDb3UMQqDMBQE0NcVRYJ0Es2DTNAki2zpHn1DkqZQC9tg/JdE9q+GbJf4Z7KnGWcDF6AlYhVRTYoPqV7gHx3kZDzC3ib7UEaQdcGQET8ykOaDGtcu+RqxEi7MCI2T4ajUzfOGnD3J5PX5T5cvyX68ARl2MbbIgAHT1I2xaFIMXL9AMFjv4hfyDQjD8l3QzvI03nsy3hyoc/y5r0A8PhU4c6Xb7lIAAAAASUVORK5CYII=");
-}
-
-/* Container do jogo */
 #game-container {
-  position: relative;
+  border: 3px solid #0f0;
   width: 600px;
   height: 600px;
-  background-color: #222;
-  border: 3px solid #0f0;
-  box-shadow: 0 0 10px #0f0;
+  margin-top: 20px;
+  background-color: #000;
 }
 
 canvas {
   display: block;
-  background-color: #000;
-  margin: auto;
+  background-color: black;
   border-radius: 8px;
 }
 
-/* HUD do score */
 #score {
-  margin: 10px 0;
+  margin-top: 10px;
   font-size: 24px;
-  letter-spacing: 2px;
 }
 
-/* Botão iniciar */
 #start-button {
   background: #0f0;
   border: none;
-  color: #000;
-  font-weight: bold;
   padding: 10px 20px;
-  margin-bottom: 20px;
+  font-weight: bold;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 0 0 15px #0f0;
-  transition: background 0.3s;
-}
-#start-button:hover {
-  background: #0c0;
+  box-shadow: 0 0 10px #0f0;
 }
 
-/* Modal ranking */
+#touch-controls {
+  margin-top: 20px;
+}
+
+#touch-controls button {
+  margin: 0 10px;
+  padding: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  background: #0f0;
+  border-radius: 50%;
+  border: none;
+  color: #000;
+}
+
 #ranking-modal {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   background: #111;
   border: 2px solid #0f0;
-  padding: 20px 40px;
+  padding: 20px 30px;
   box-shadow: 0 0 30px #0f0;
-  display: none;
-  z-index: 1000;
+  color: #0f0;
   max-width: 90vw;
   max-height: 80vh;
   overflow-y: auto;
+  z-index: 1000;
 }
+
 #ranking-modal h2 {
-  margin-top: 0;
-  color: #0f0;
   text-align: center;
 }
+
 #ranking-list {
-  list-style: none;
+  list-style-type: none;
   padding-left: 0;
 }
+
 #ranking-list li {
   margin: 5px 0;
-  font-size: 18px;
-  letter-spacing: 1.5px;
 }
+
 #close-ranking {
-  display: block;
-  margin: 20px auto 0 auto;
   background: #0f0;
   border: none;
   padding: 8px 15px;
   font-weight: bold;
-  color: #000;
   cursor: pointer;
+  margin-top: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 5px;
-}
-
-/* Toques de controle para celular */
-#touch-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 15px;
-}
-#touch-controls button {
-  background: #0f0;
-  border: none;
-  padding: 15px 18px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #000;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #0f0;
-  cursor: pointer;
-  user-select: none;
-}
-#touch-controls button:active {
-  background: #0c0;
 }
