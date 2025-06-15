@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game Zone</title>
+  <title>Game Zone - Jogo da Cobrinha</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <!-- Tela inicial -->
   <div id="menu-section" class="centered neon-bg">
-    <h1>🎮 Game Zone</h1>
-    <button id="start-button" class="btn">Iniciar Jogo da Cobrinha 🐍</button>
+    <div class="start-container">
+      <img src="snake-texture.png" alt="Cobrinha" class="snake-img" />
+      <h1>Jogo da Cobrinha 🐍</h1>
+      <button id="start-button" class="btn neon-btn">Iniciar</button>
+    </div>
   </div>
 
   <!-- Seção do jogo -->
@@ -23,10 +26,17 @@
     <canvas id="game" width="400" height="400"></canvas>
     <div id="game-over" style="display:none;">
       <h2>💀 Game Over!</h2>
-      <button class="btn" id="restart-button">🔁 Reiniciar</button>
-      <button class="btn" id="back-menu-button">🔙 Voltar ao Menu</button>
+      <button class="btn neon-btn" id="restart-button">🔁 Reiniciar</button>
+      <button class="btn neon-btn" id="back-menu-button">🔙 Voltar ao Menu</button>
+      <div id="ranking-section">
+        <h3>Ranking Local</h3>
+        <ol id="ranking-list"></ol>
+      </div>
     </div>
   </div>
+
+  <audio id="eat-sound" src="eat.wav" preload="auto"></audio>
+  <audio id="gameover-sound" src="gameover.wav" preload="auto"></audio>
 
   <script src="script.js"></script>
 </body>
