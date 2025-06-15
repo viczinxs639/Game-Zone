@@ -1,24 +1,25 @@
+/* Reset */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   height: 100vh;
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  user-select: none;
 }
 
 .centered {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 480px;
@@ -26,6 +27,7 @@ body {
   text-align: center;
 }
 
+/* Neon background */
 .neon-bg {
   background: linear-gradient(45deg, #00ff88, #00cc66);
   box-shadow: 0 0 50px #00ff88, inset 0 0 30px #00cc66;
@@ -33,26 +35,37 @@ body {
   height: 100vh;
 }
 
-h1 {
-  font-size: 4em;
-  margin-bottom: 40px;
-  color: #00ff88;
-  text-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88;
-  user-select: none;
+/* Start container */
+.start-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
+.snake-img {
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 0 5px #00ff88);
+}
+
+h1 {
+  font-size: 3.5em;
+  color: #00ff88;
+  text-shadow: 0 0 15px #00ff88;
+}
+
+/* Buttons */
 .btn {
-  padding: 20px 40px;
+  padding: 18px 45px;
   font-size: 1.5em;
   color: white;
   background-color: #00aa55;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   cursor: pointer;
   transition: 0.3s;
   box-shadow: 0 0 15px #00aa55;
-  margin: 10px;
-  user-select: none;
 }
 
 .btn:hover,
@@ -62,21 +75,22 @@ h1 {
   outline: none;
 }
 
+.neon-btn {
+  box-shadow: 0 0 20px #00ff88, inset 0 0 10px #00ff88;
+}
+
+/* Scoreboard */
 #scoreboard {
   display: flex;
   justify-content: space-between;
   width: 400px;
   font-size: 1.5em;
   margin-bottom: 10px;
-  user-select: none;
-}
-
-#score,
-#high-score {
   color: #00ff88;
   text-shadow: 0 0 10px #00ff88;
 }
 
+/* Game section */
 #game-section {
   flex-direction: column;
   align-items: center;
@@ -84,6 +98,7 @@ h1 {
   max-width: 480px;
 }
 
+/* Canvas */
 canvas {
   background-color: #222;
   border: 2px solid #fff;
@@ -93,10 +108,11 @@ canvas {
   height: 400px;
   max-width: 100%;
   max-height: 100%;
+  image-rendering: pixelated;
 }
 
+/* Game Over */
 #game-over {
-  text-align: center;
   margin-top: 20px;
 }
 
@@ -104,10 +120,21 @@ canvas {
   font-size: 3em;
   color: red;
   text-shadow: 0 0 10px red;
-  user-select: none;
 }
 
-/* Mobile */
+/* Ranking */
+#ranking-section {
+  margin-top: 15px;
+  text-align: left;
+  color: #00ff88;
+}
+
+#ranking-list {
+  list-style-position: inside;
+  font-size: 1.2em;
+}
+
+/* Mobile styles */
 @media (max-width: 450px) {
   canvas {
     width: 300px !important;
@@ -116,5 +143,15 @@ canvas {
   #scoreboard {
     width: 300px;
     font-size: 1.2em;
+  }
+  h1 {
+    font-size: 2.5em;
+  }
+  .btn {
+    padding: 15px 30px;
+    font-size: 1.2em;
+  }
+  .snake-img {
+    width: 120px;
   }
 }
