@@ -1,247 +1,224 @@
-// Elementos
-const menu = document.getElementById('menu-section');
-const game = document.getElementById('game-section');
-const gameOver = document.getElementById('game-over');
-const startButton = document.getElementById('start-button');
-const restartButton = document.getElementById('restart-button');
-const backMenuButton = document.getElementById('back-menu-button');
+(() => {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score');
+  const startButton = document.getElementById('start-button');
+  const rankingModal = document.getElementById('ranking-modal');
+  const rankingList = document.getElementById('ranking-list');
+  const closeRanking = document.getElementById('close-ranking');
+  const touchButtons = document.querySelectorAll('#touch-controls button');
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+  const canvasSize = 600;
+  const tileCount = 20;
+  const tileSize = canvasSize / tileCount;
 
-const scoreDisplay = document.getElementById('score');
-const highScoreDisplay = document.getElementById('high-score');
-const rankingList = document.getElementById('ranking-list');
+  // Texturas base64 embutidas para snake e maçã (sprites simples)
+  const snakeTexture = new Image();
+  snakeTexture.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAlklEQVQ4T2NkoBAwUqifAQL8TyMiMlKg2v+pDZLnw8O3aF5V+YOfhDYCAeQOdwYB+Wi5lHCAmAC/wcFhBfsNnAYajxn+ASiFJsBiYeB8J0VgPr8PFAuAyIQIpyT1gROc0ohJoAxDv+A0RxRhgQUws/jt4NCBHiHeJu2DZqDSYBgJ6/1NLYxJiEJy8uBqZPdyv6DWQANxzF4J7pGiNQAAAABJRU5ErkJggg==";
+  const appleTexture = new Image();
+  appleTexture.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAArklEQVQ4T2NkoBAwUqifAQL8TyMiMlKg2v+pDZLnw8O3aF5V+YOfhDYCAeQOdwYB+Wi5lHCAmAC/wcFhBfsNnAYajxn+ASiFJsBiYeB8J0VgPr8PFAuAyIQIpyT1gROc0ohJoAxDv+A0RxRhgQUws/jt4NCBHiHeJu2DZqDSYBgJ6/1NLYxJiEJy8uBqZPdyv6DWQANxzF4J7pGiNQAAAABJRU5ErkJggg==";
 
-const eatSound = document.getElementById('eat-sound');
-const gameoverSound = document.getElementById('gameover-sound');
+  let snake = [];
+  let velocity = { x: 0, y: 0 };
+  let apple = { x: 0, y: 0 };
+  let score = 0;
+  let running = false;
+  let moveQueue = [];
+  let gameLoopInterval;
 
-const grid = 20;
-let count = 0;
-let animation;
+  // Sons com URLs públicas
+  const eatSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
+  const gameOverSound = new Audio('https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg');
 
-let snake, apple;
-let score = 0;
-let highScore = 0;
-let speed = 12; // menor é mais lento
-
-// Carregar texturas
-const snakeImg = new Image();
-snakeImg.src = "snake-texture.png";
-
-const appleImg = new Image();
-appleImg.src = "apple-texture.png";
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
-function resetGame() {
-  snake = {
-    x: 160,
-    y: 160,
-    dx: grid,
-    dy: 0,
-    cells: [],
-    maxCells: 4
-  };
-  apple = {
-    x: getRandomInt(0, 20) * grid,
-    y: getRandomInt(0, 20) * grid
-  };
-  score = 0;
-  scoreDisplay.textContent = 'Score: ' + score;
-}
-
-function startGame() {
-  menu.style.display = 'none';
-  game.style.display = 'flex';
-  gameOver.style.display = 'none';
-  resetGame();
-  animation = requestAnimationFrame(loop);
-}
-
-function backToMenu() {
-  cancelAnimationFrame(animation);
-  game.style.display = 'none';
-  gameOver.style.display = 'none';
-  menu.style.display = 'flex';
-  updateRanking();
-}
-
-function restartGame() {
-  gameOver.style.display = 'none';
-  resetGame();
-  animation = requestAnimationFrame(loop);
-}
-
-function endGame() {
-  cancelAnimationFrame(animation);
-  gameOver.style.display = 'block';
-
-  // Toca som
-  gameoverSound.currentTime = 0;
-  gameoverSound.play();
-
-  // Atualiza recorde
-  if(score > highScore){
-    highScore = score;
-    localStorage.setItem('highScore', highScore);
-  }
-  highScoreDisplay.textContent = 'Recorde: ' + highScore;
-
-  // Salva ranking local
-  saveRanking(score);
-  updateRanking();
-}
-
-function loop() {
-  animation = requestAnimationFrame(loop);
-
-  if (++count < speed) return; // controla a velocidade (menor valor = mais lento)
-  count = 0;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  snake.x += snake.dx;
-  snake.y += snake.dy;
-
-  // Colisão paredes
-  if (
-    snake.x < 0 || snake.x >= canvas.width ||
-    snake.y < 0 || snake.y >= canvas.height
-  ) {
-    endGame();
-    return;
-  }
-
-  snake.cells.unshift({ x: snake.x, y: snake.y });
-
-  if (snake.cells.length > snake.maxCells) {
-    snake.cells.pop();
-  }
-
-  // desenha maçã com textura
-  ctx.drawImage(appleImg, apple.x, apple.y, grid - 1, grid - 1);
-
-  // desenha cobra com textura
-  snake.cells.forEach(function (cell, index) {
-    ctx.drawImage(snakeImg, cell.x, cell.y, grid - 1, grid - 1);
-
-    // come maçã
-    if (cell.x === apple.x && cell.y === apple.y) {
-      snake.maxCells++;
-      score++;
-      scoreDisplay.textContent = 'Score: ' + score;
-
-      eatSound.currentTime = 0;
-      eatSound.play();
-
-      apple.x = getRandomInt(0, 20) * grid;
-      apple.y = getRandomInt(0, 20) * grid;
+  function placeApple() {
+    let valid = false;
+    while (!valid) {
+      apple.x = Math.floor(Math.random() * tileCount);
+      apple.y = Math.floor(Math.random() * tileCount);
+      valid = !snake.some(segment => segment.x === apple.x && segment.y === apple.y);
     }
+  }
 
-    // colide consigo mesma
-    for (let i = index + 1; i < snake.cells.length; i++) {
-      if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-        endGame();
-        return;
+  function resetGame() {
+    snake = [
+      { x: 10, y: 10 },
+      { x: 9, y: 10 },
+      { x: 8, y: 10 }
+    ];
+    velocity = { x: 1, y: 0 };
+    score = 0;
+    scoreEl.textContent = 'Score: 0';
+    moveQueue = [];
+    placeApple();
+    running = true;
+  }
+
+  function drawGrid() {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvasSize, canvasSize);
+  }
+
+  function drawSnake() {
+    snake.forEach((segment, index) => {
+      ctx.drawImage(snakeTexture, segment.x * tileSize, segment.y * tileSize, tileSize, tileSize);
+      ctx.strokeStyle = '#0f0';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(segment.x * tileSize, segment.y * tileSize, tileSize, tileSize);
+    });
+  }
+
+  function drawApple() {
+    ctx.drawImage(appleTexture, apple.x * tileSize, apple.y * tileSize, tileSize, tileSize);
+    ctx.strokeStyle = '#f00';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(apple.x * tileSize, apple.y * tileSize, tileSize, tileSize);
+  }
+
+  function updateScore() {
+    scoreEl.textContent = `Score: ${score}`;
+  }
+
+  function gameOver() {
+    running = false;
+    clearInterval(gameLoopInterval);
+    gameOverSound.play();
+    updateRanking(score);
+    showRanking();
+  }
+
+  function moveSnake() {
+    if (moveQueue.length > 0) {
+      const nextDir = moveQueue.shift();
+      // Impede reversão direta
+      if (!((nextDir.x === -velocity.x && nextDir.y === 0) || (nextDir.y === -velocity.y && nextDir.x === 0))) {
+        velocity = nextDir;
       }
     }
-  });
-}
 
-// Controle teclado
-document.addEventListener("keydown", function (e) {
-  if (!snake) return;
-  if (e.key === "ArrowLeft" && snake.dx === 0) {
-    snake.dx = -grid;
-    snake.dy = 0;
-  } else if (e.key === "ArrowUp" && snake.dy === 0) {
-    snake.dy = -grid;
-    snake.dx = 0;
-  } else if (e.key === "ArrowRight" && snake.dx === 0) {
-    snake.dx = grid;
-    snake.dy = 0;
-  } else if (e.key === "ArrowDown" && snake.dy === 0) {
-    snake.dy = grid;
-    snake.dx = 0;
-  }
-});
+    const head = { x: snake[0].x + velocity.x, y: snake[0].y + velocity.y };
 
-// Controle toque para celular - Swipe simples
-let touchStartX = null;
-let touchStartY = null;
-
-canvas.addEventListener('touchstart', e => {
-  touchStartX = e.changedTouches[0].screenX;
-  touchStartY = e.changedTouches[0].screenY;
-});
-
-canvas.addEventListener('touchend', e => {
-  if (touchStartX === null || touchStartY === null) return;
-
-  let touchEndX = e.changedTouches[0].screenX;
-  let touchEndY = e.changedTouches[0].screenY;
-
-  let diffX = touchEndX - touchStartX;
-  let diffY = touchEndY - touchStartY;
-
-  if (Math.abs(diffX) > Math.abs(diffY)) {
-    // Horizontal swipe
-    if (diffX > 30 && snake.dx === 0) {
-      snake.dx = grid;
-      snake.dy = 0;
-    } else if (diffX < -30 && snake.dx === 0) {
-      snake.dx = -grid;
-      snake.dy = 0;
+    // Verifica colisão nas bordas
+    if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+      gameOver();
+      return;
     }
-  } else {
-    // Vertical swipe
-    if (diffY > 30 && snake.dy === 0) {
-      snake.dy = grid;
-      snake.dx = 0;
-    } else if (diffY < -30 && snake.dy === 0) {
-      snake.dy = -grid;
-      snake.dx = 0;
+
+    // Verifica colisão com o corpo
+    if (snake.some(seg => seg.x === head.x && seg.y === head.y)) {
+      gameOver();
+      return;
+    }
+
+    snake.unshift(head);
+
+    // Verifica se comeu a maçã
+    if (head.x === apple.x && head.y === apple.y) {
+      score++;
+      updateScore();
+      eatSound.play();
+      placeApple();
+    } else {
+      snake.pop();
     }
   }
 
-  touchStartX = null;
-  touchStartY = null;
-});
-
-// Botões
-startButton.addEventListener('click', startGame);
-restartButton.addEventListener('click', restartGame);
-backMenuButton.addEventListener('click', backToMenu);
-
-// Puxa highscore do localStorage
-if(localStorage.getItem('highScore')){
-  highScore = parseInt(localStorage.getItem('highScore'));
-  highScoreDisplay.textContent = 'Recorde: ' + highScore;
-}
-
-// Ranking simples local usando localStorage
-function saveRanking(score){
-  let ranking = JSON.parse(localStorage.getItem('ranking')) || [];
-  ranking.push(score);
-  ranking.sort((a,b) => b - a);
-  if(ranking.length > 5) ranking = ranking.slice(0,5);
-  localStorage.setItem('ranking', JSON.stringify(ranking));
-}
-
-function updateRanking(){
-  let ranking = JSON.parse(localStorage.getItem('ranking')) || [];
-  rankingList.innerHTML = '';
-  if(ranking.length === 0){
-    rankingList.innerHTML = '<li>Nenhum registro ainda.</li>';
-    return;
+  function gameLoop() {
+    drawGrid();
+    moveSnake();
+    drawSnake();
+    drawApple();
   }
-  ranking.forEach((score,i) => {
-    rankingList.innerHTML += `<li>${i+1}. ${score} pontos</li>`;
-  });
-}
 
-// Atualiza ranking na tela inicial caso volte
-updateRanking();
+  function startGame() {
+    if (running) return;
+    resetGame();
+    gameLoopInterval = setInterval(gameLoop, 120);
+  }
+
+  // Ranking localStorage
+  function getRanking() {
+    const raw = localStorage.getItem('snakeRanking');
+    return raw ? JSON.parse(raw) : [];
+  }
+
+  function saveRanking(ranking) {
+    localStorage.setItem('snakeRanking', JSON.stringify(ranking));
+  }
+
+  function updateRanking(score) {
+    let ranking = getRanking();
+    ranking.push({ score, date: new Date().toISOString() });
+    ranking.sort((a,b) => b.score - a.score);
+    if (ranking.length > 5) ranking.length = 5;
+    saveRanking(ranking);
+  }
+
+  function showRanking() {
+    const ranking = getRanking();
+    rankingList.innerHTML = '';
+    if (ranking.length === 0) {
+      rankingList.innerHTML = '<li>Nenhum resultado ainda</li>';
+    } else {
+      ranking.forEach((entry, i) => {
+        const date = new Date(entry.date);
+        const li = document.createElement('li');
+        li.textContent = `${i+1}º - ${entry.score} pontos em ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        rankingList.appendChild(li);
+      });
+    }
+    rankingModal.style.display = 'block';
+  }
+
+  // Event Listeners
+
+  startButton.addEventListener('click', () => {
+    rankingModal.style.display = 'none';
+    startGame();
+  });
+
+  closeRanking.addEventListener('click', () => {
+    rankingModal.style.display = 'none';
+  });
+
+  window.addEventListener('keydown', (e) => {
+    const directions = {
+      'ArrowUp': { x: 0, y: -1 },
+      'ArrowDown': { x: 0, y: 1 },
+      'ArrowLeft': { x: -1, y: 0 },
+      'ArrowRight': { x: 1, y: 0 }
+    };
+    if (directions[e.key]) {
+      e.preventDefault();
+      moveQueue.push(directions[e.key]);
+    }
+  });
+
+  touchButtons.forEach(btn => {
+    btn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const dir = btn.getAttribute('data-dir');
+      const directions = {
+        'ArrowUp': { x: 0, y: -1 },
+        'ArrowDown': { x: 0, y: 1 },
+        'ArrowLeft': { x: -1, y: 0 },
+        'ArrowRight': { x: 1, y: 0 }
+      };
+      if (directions[dir]) {
+        moveQueue.push(directions[dir]);
+      }
+    });
+    btn.addEventListener('click', () => {
+      const dir = btn.getAttribute('data-dir');
+      const directions = {
+        'ArrowUp': { x: 0, y: -1 },
+        'ArrowDown': { x: 0, y: 1 },
+        'ArrowLeft': { x: -1, y: 0 },
+        'ArrowRight': { x: 1, y: 0 }
+      };
+      if (directions[dir]) {
+        moveQueue.push(directions[dir]);
+      }
+    });
+  });
+
+})();
