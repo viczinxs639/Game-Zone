@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Zone - Cobrinha 🐍</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game Zone - Cobrinha</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <!-- Tela inicial -->
-  <section id="menu-section" class="centered menu">
+  <div id="menu-section" class="centered">
     <h1>🎮 Game Zone</h1>
-    <p>Desafie-se no clássico jogo da Cobrinha!</p>
-    <button class="btn" onclick="startGame()">▶️ Jogar</button>
-  </section>
+    <button class="btn start-btn" onclick="showGameScreen()">Jogar Cobrinha 🐍</button>
+  </div>
 
-  <!-- Seção do jogo -->
-  <section id="game-section" class="centered" style="display: none;">
+  <!-- Tela do jogo -->
+  <div id="game-section" class="centered">
+    <h2 class="game-title">🐍 Snake Game</h2>
     <div id="scoreboard">
       <span id="score">Score: 0</span>
       <span id="high-score">Recorde: 0</span>
     </div>
     <canvas id="game" width="400" height="400"></canvas>
-    <div id="game-over" style="display: none;">
+    <button class="btn play-btn" onclick="startGame()">▶️ Iniciar Jogo</button>
+    <div id="game-over">
       <h2>💀 Game Over!</h2>
       <button class="btn" onclick="restartGame()">🔁 Reiniciar</button>
       <button class="btn" onclick="backToMenu()">🔙 Voltar ao Menu</button>
     </div>
-  </section>
+    <div id="ranking">
+      <h3>🏆 Ranking (Top 3)</h3>
+      <ol id="ranking-list"></ol>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
