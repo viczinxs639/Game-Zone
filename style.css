@@ -14,54 +14,57 @@ body {
   align-items: center;
   flex-direction: column;
   height: 100vh;
-  text-align: center;
-  padding: 10px;
 }
 
-h1, h2, h3 {
-  text-shadow: 0 0 10px #00ff88;
+.neon-bg {
+  background: linear-gradient(45deg, #00ff88, #00cc66);
+  box-shadow: 0 0 50px #00ff88, inset 0 0 30px #00cc66;
 }
 
 h1 {
-  font-size: 3em;
+  font-size: 4em;
+  margin-bottom: 40px;
   color: #00ff88;
-}
-
-.game-title {
-  font-size: 2em;
-  color: #00ffff;
-  margin-bottom: 10px;
+  text-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88;
 }
 
 .btn {
-  padding: 15px 30px;
-  font-size: 1.2em;
+  padding: 20px 40px;
+  font-size: 1.5em;
   color: white;
-  background: linear-gradient(45deg, #00aa55, #00ff88);
+  background-color: #00aa55;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  margin: 10px;
-  box-shadow: 0 0 15px #00ff88;
   transition: 0.3s;
+  box-shadow: 0 0 15px #00aa55;
+  margin: 10px;
+  user-select: none;
 }
 
-.btn:hover {
-  box-shadow: 0 0 30px #00ff88;
-  background: linear-gradient(45deg, #00ff88, #00aa55);
+.btn:hover,
+.btn:focus {
+  background-color: #00ff88;
+  box-shadow: 0 0 25px #00ff88;
+  outline: none;
 }
 
-.play-btn {
-  background: linear-gradient(45deg, #0088ff, #00ffff);
-  box-shadow: 0 0 15px #00ffff;
+#scoreboard {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  user-select: none;
 }
 
-.play-btn:hover {
-  box-shadow: 0 0 30px #00ffff;
+#score,
+#high-score {
+  color: #00ff88;
+  text-shadow: 0 0 10px #00ff88;
 }
 
 #game-section {
-  display: none;
   flex-direction: column;
   align-items: center;
 }
@@ -69,47 +72,49 @@ h1 {
 canvas {
   background-color: #222;
   border: 2px solid #fff;
-  margin-top: 20px;
-}
-
-#scoreboard {
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  text-shadow: 0 0 5px #ffffff;
+  margin-top: 10px;
+  touch-action: none; /* para touch funcionar melhor */
 }
 
 #game-over {
-  display: none;
   text-align: center;
+  margin-top: 20px;
+}
+
+#game-over h2 {
+  font-size: 3em;
+  color: red;
+  text-shadow: 0 0 10px red;
 }
 
 #ranking {
-  margin-top: 15px;
+  margin-top: 20px;
   text-align: center;
-}
-
-#ranking-list {
-  list-style: none;
-  padding: 0;
-}
-
-#ranking-list li {
   color: #00ff88;
-  text-shadow: 0 0 5px #00ff88;
-  margin: 3px 0;
+  font-size: 1.2em;
+  text-shadow: 0 0 10px #00ff88;
+  user-select: none;
 }
 
-/* Responsivo para celular */
-@media (max-width: 500px) {
+/* Para o botão iniciar */
+#start-button {
+  background: linear-gradient(45deg, #00ff88, #007755);
+  box-shadow: 0 0 25px #00ff88;
+}
+
+#start-button:hover {
+  background: linear-gradient(45deg, #00ffaa, #009966);
+  box-shadow: 0 0 35px #00ffaa;
+}
+
+/* Ajustes mobile */
+@media (max-width: 450px) {
   canvas {
+    width: 300px !important;
+    height: 300px !important;
+  }
+  #scoreboard {
     width: 300px;
-    height: 300px;
-  }
-  .btn {
-    padding: 10px 20px;
-    font-size: 1em;
-  }
-  h1 {
-    font-size: 2em;
+    font-size: 1.2em;
   }
 }
